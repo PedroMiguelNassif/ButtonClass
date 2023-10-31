@@ -51,7 +51,8 @@ uint16_t buffer[2] = {0};
 int16_t xy[2] = { 0 };
 int32_t LED[4] = { 0 };
 uint16_t aux = 0;
-
+uint8_t counter = 0;
+uint8_t press_the_fuckingbutton = 0;
 enum
 {
 	W = 0, N, E, S
@@ -119,20 +120,18 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_TIM2_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   MX_TIM4_Init();
-  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_Base_Start(&htim2);
-	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
-	//HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
-	//HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
-  //HAL_ADC_Start_DMA(&hadc1, (uint32_t *) buffer, 2);
-	//HAL_DMA_Start(&hdma_memtomem_dma2_stream1, (uint32_t)LED, (uint32_t)&(htim4.Instance->CCR1), 4);
+// HAL_TIM_Base_Start(&htim2);
+//HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+//HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+//HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
+//HAL_ADC_Start_DMA(&hadc1, (uint32_t *) buffer, 2);
+//HAL_DMA_Start(&hdma_memtomem_dma2_stream1, (uint32_t)LED, (uint32_t)&(htim4.Instance->CCR1), 4);
 	
   /* USER CODE END 2 */
 
@@ -141,43 +140,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  switch (button)
+	  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET)
 	  {
-	  case waiting:
-		  break;
-	  case detect:
-		  break;
-	  case button_press:
-		  sinal_bot_pressionado = 0;
-		  aux++;
-		  button = waiting;
-		  break;
-	  default:
-		  break;
-	  }
-	  
-	  switch (state)
-	  {
-	  case off:
-		  if (sinal_bot_pressionado) state = twohz;
-		  htim4.Instance->CCR2 = 0;
-		  break;
-	  case twohz:
-		  if (sinal_bot_pressionado) state = fourhz;
-		  htim4.Instance->CCR2 = htim4.Instance->ARR / 2;
-		  htim4.Instance->PSC = 699;
-		  break;
-	  case fourhz:
-		  if (sinal_bot_pressionado) state = on;
-		  htim4.Instance->CCR2 = htim4.Instance->ARR / 2;
-		  htim4.Instance->PSC = 349;
-		  break;
-	  case on:
-		  if (sinal_bot_pressionado) state = off;
-		  htim4.Instance->CCR2 = htim4.Instance->ARR;
-		  break;
-	  default:
-		  break;
+		  counter++;
 	  }
 
     /* USER CODE BEGIN 3 */
@@ -233,35 +198,6 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-
-	if (GPIO_Pin != GPIO_PIN_0) return;
-	EXTI->RTSR = EXTI->RTSR & ~0x1;
-	EXTI->IMR = EXTI->IMR & ~0x1;
-	//HAL_NVIC_DisableIRQ(EXTI0_IRQn);
-	__NVIC_ClearPendingIRQ(EXTI0_IRQn);
-	__HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
-	button = detect;
-	HAL_TIM_Base_Start_IT(&htim3);
-	
-}
-
-void DMA_Callback(DMA_HandleTypeDef *_hdma)
-{
-	
-	
-	
-}
-
-void checkstate()
-{
-	
-	
-	
-}
-
-
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 
 	uint8_t i;
@@ -270,32 +206,10 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 		xy[i] = buffer[i] - center;
 
 	}
-	
 	//state = HAL_OK;
 	return;
 }
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	if (htim == &htim3)
-	{
-		if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0))
-		{
-			button = button_press;
-			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-			sinal_bot_pressionado = 1;
-		}
-		else
-		{
-			button = waiting;
-		}
-		EXTI->RTSR = 1;
-		EXTI->IMR = 1;
-		//HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-		HAL_TIM_Base_Stop_IT(htim);
-
-	}
-}
 
 /* USER CODE END 4 */
 

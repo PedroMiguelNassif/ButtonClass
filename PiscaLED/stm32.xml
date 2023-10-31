@@ -48,7 +48,7 @@
     <AllDependencies>
       <ProjectDependency>
         <RelativePath>PiscaLED.gpdsc</RelativePath>
-        <Timestamp>133414158985930000</Timestamp>
+        <Timestamp>133432284931871173</Timestamp>
       </ProjectDependency>
     </AllDependencies>
     <RootDirectory>
@@ -321,11 +321,11 @@
       <ImportedConfiguration>
         <Settings>
           <IncludeDirectories>
-            <string>E:\cb\1ele911-23-sem4-adc-xy-dma-caiobrm-main\PiscaLED\Core\Inc</string>
-            <string>E:\cb\1ele911-23-sem4-adc-xy-dma-caiobrm-main\PiscaLED\Drivers\CMSIS\Include</string>
-            <string>E:\cb\1ele911-23-sem4-adc-xy-dma-caiobrm-main\PiscaLED\Drivers\CMSIS\Device\ST\STM32F4xx\Include</string>
-            <string>E:\cb\1ele911-23-sem4-adc-xy-dma-caiobrm-main\PiscaLED\Drivers\STM32F4xx_HAL_Driver\Inc</string>
-            <string>E:\cb\1ele911-23-sem4-adc-xy-dma-caiobrm-main\PiscaLED\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy</string>
+            <string>E:\Repos\ButtonClass\PiscaLED\Core\Inc</string>
+            <string>E:\Repos\ButtonClass\PiscaLED\Drivers\CMSIS\Include</string>
+            <string>E:\Repos\ButtonClass\PiscaLED\Drivers\CMSIS\Device\ST\STM32F4xx\Include</string>
+            <string>E:\Repos\ButtonClass\PiscaLED\Drivers\STM32F4xx_HAL_Driver\Inc</string>
+            <string>E:\Repos\ButtonClass\PiscaLED\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy</string>
           </IncludeDirectories>
           <PreprocessorMacros>
             <string>$$com.sysprogs.bspoptions.primary_memory$$_layout</string>
